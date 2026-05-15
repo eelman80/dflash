@@ -1,3 +1,6 @@
+# Personal fork of z-lab/dflash
+# Customization: added 'train' to __all__ for easier access during experimentation
+
 __all__ = [
     "DFlashDraftModel",
     "extract_context_feature",
