@@ -85,9 +85,11 @@ class DFlashAttention(nn.Module):
         if self.is_sliding:
             # Keep (sliding_window - 1) context tokens so that together with
             # the current query token the full window is covered.
+            # NOTE: sliding_window can be None if config omits it; guard against
+            # that to avoid a confusing TypeError at runtime.
+            if self.sliding_window is None:
+                raise ValueError(
+                    "sliding_window must be set in DFlashConfig when "
+                    "layer_type is 'sliding_attention'"
+                )
             keep_ctx = self.sliding_window - 1
-            if S > keep_ctx:
-                skip = S - keep_ctx
-                x_ctx = x_ctx[:, skip:]
-                S = x_ctx.shape[1]
-     
